@@ -11,8 +11,8 @@ use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayInterface;
  * Plugin implementation of the 'link_domain' formatter.
  *
  * @FieldFormatter(
- *   id = "pluginapi_link_domain",
- *   label = @Translation("Link domain (pluginapi)"),
+ *   id = "d8plugin_link_domain",
+ *   label = @Translation("Link domain (d8plugin)"),
  *   field_types = {
  *     "link_field"
  *   }

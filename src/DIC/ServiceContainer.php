@@ -7,14 +7,12 @@ use Drupal\d8plugin\Discovery\Argument\ArgumentsResolver;
 use Drupal\d8plugin\Discovery\Argument\Resolver\TranslationResolver;
 use Drupal\d8plugin\Discovery\PluginDiscoveryFactory;
 use Drupal\d8plugin\Discovery\PluginInfoRegistry;
-use Drupal\d8plugin\Discovery\PluginTypeRegistry;
 use Drupal\d8plugin\ModuleInfoCollection;
 use vektah\parser_combinator\language\php\annotation\PhpAnnotationParser;
 
 /**
  * @property ModuleInfoCollection $participatingModules
  * @property PluginDiscoveryFactory $pluginDiscoveryFactory
- * @property PluginTypeRegistry $pluginTypeRegistry
  * @property PluginInfoRegistry $pluginInfoRegistry
  * @property ArgumentsResolver $argumentsResolver
  */
@@ -25,7 +23,7 @@ class ServiceContainer extends ServiceContainerBase {
    */
   protected function get_participatingModules() {
     $moduleDirs = array();
-    foreach (module_implements('pluginapi') as $module) {
+    foreach (module_implements('d8plugin') as $module) {
       $moduleDirs[$module] = drupal_get_path('module', $module);
     }
     return new ModuleInfoCollection($moduleDirs);
@@ -47,13 +45,6 @@ class ServiceContainer extends ServiceContainerBase {
   protected function get_pluginDiscoveryFactory() {
     $parser = new PhpAnnotationParser();
     return new PluginDiscoveryFactory($parser, $this->argumentsResolver);
-  }
-
-  /**
-   * @return PluginTypeRegistry
-   */
-  protected function get_pluginTypeRegistry() {
-    return new PluginTypeRegistry();
   }
 
   /**

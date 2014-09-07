@@ -14,7 +14,7 @@ use Drupal\d8plugin\Plugin\ConfigurablePluginInterface;
  *
  * @ingroup field_formatter
  *
- * @see \Drupal\pluginapi\Field\Annotation\FieldFormatter
+ * @see \Drupal\d8plugin_field\Annotation\FieldFormatter
  */
 interface FormatterInterface extends ConfigurablePluginInterface {
 

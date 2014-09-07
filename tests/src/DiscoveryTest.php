@@ -11,12 +11,13 @@ use Drupal\d8plugin_field\DIC\FieldServiceContainer;
 use Drupal\d8plugin_field\FormatterPluginManager;
 use Drupal\d8plugin\PluginDefinition\PluginDefinition;
 use Drupal\d8plugin\PluginType;
+use Drupal\d8plugin_test_link\Plugin\Field\FieldFormatter\DomainLinkFormatter;
 use Drupal\d8plugin_test_link\Plugin\Field\FieldFormatter\LinkFormatter;
 use Drupal\Tests\d8plugin\Mock\MockTranslationResolver;
 use vektah\parser_combinator\language\php\annotation\DoctrineAnnotation;
 use vektah\parser_combinator\language\php\annotation\PhpAnnotationParser;
 
-abstract class DiscoveryTest extends \PHPUnit_Framework_TestCase {
+class DiscoveryTest extends \PHPUnit_Framework_TestCase {
 
   /**
    * @see FileDiscovery
@@ -70,7 +71,7 @@ EOT;
   function testPluginDiscovery() {
     $pluginType = new PluginType('Field\\FieldFormatter', 'FieldFormatter');
     $discovery = $this->getServiceContainer()->pluginDiscoveryFactory->getPluginDiscovery($pluginType);
-    $discovery->discoverModulePlugins('d8plugin_field', dirname(dirname(__DIR__)) . '/modules/field');
+    $discovery->discoverModulePlugins('d8plugin_test_link', dirname(__DIR__) . '/modules/link');
     $this->assertEquals(
       $this->getExpectedDefinitions(),
       $discovery->getCollectedInfo());
@@ -90,18 +91,6 @@ EOT;
       $this->getFormatterManager()->getInstance('d8plugin_link'));
   }
 
-  function testDocblockExtraction() {
-    $strings  = [
-      'begin /* foo */ end',
-    ];
-    foreach ($strings as $string) {
-      if (preg_match('~(/*|//)~', $string, $m)) {
-        print "\n$string:\n";
-        var_dump($m);
-      }
-    }
-  }
-
   /**
    * @return FormatterPluginManager
    */
@@ -118,20 +107,22 @@ EOT;
     return [
       'd8plugin_link' => new PluginDefinition(
         'd8plugin_link',
-        'Drupal\\d8plugin\\Plugin\\Field\\FieldFormatter\\LinkFormatter',
+        LinkFormatter::getCalledClass(),
         [
           'id' => 'd8plugin_link',
-          'label' => 'Link (d8plugin)',
+          'label' => "t('Link (d8plugin)')",
           'field_types' => ['link_field'],
-        ]),
+        ]
+      ),
       'd8plugin_link_domain' => new PluginDefinition(
         'd8plugin_link_domain',
-        'Drupal\\d8plugin\\Plugin\\Field\\FieldFormatter\\DomainLinkFormatter',
+        DomainLinkFormatter::getCalledClass(),
         [
           'id' => 'd8plugin_link_domain',
-          'label' => 'Link domain (d8plugin)',
+          'label' => "t('Link domain (d8plugin)')",
           'field_types' => ['link_field']
-        ]),
+        ]
+      ),
     ];
   }
 

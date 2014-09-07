@@ -4,7 +4,9 @@
 namespace Drupal\d8plugin\PluginDefinition;
 
 
-interface PluginDefinitionInterface {
+use Drupal\d8plugin\Utility\GetCalledClassInterface;
+
+interface PluginDefinitionInterface extends GetCalledClassInterface {
 
   /**
    * @return string
@@ -20,10 +22,5 @@ interface PluginDefinitionInterface {
    * @return array
    */
   function getArgs();
-
-  /**
-   * @return string
-   */
-  static function getDefinitionClass();
 
 } 

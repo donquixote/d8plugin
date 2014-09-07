@@ -16,7 +16,7 @@ class MockTranslationResolver implements AnnotationResolverInterface {
    */
   function resolve(DoctrineAnnotation $annotation) {
     return isset($annotation->arguments['value'])
-      ? 't(' . var_export($annotation->arguments['value']) . ')'
+      ? 't(' . var_export($annotation->arguments['value'], true) . ')'
       : null;
   }
 }

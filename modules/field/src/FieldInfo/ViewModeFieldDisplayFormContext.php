@@ -5,7 +5,7 @@ namespace Drupal\d8plugin_field\FieldInfo;
 
 /**
  * Argument wrapper for
- * @see \Drupal\pluginapi\Field\FormatterInterface::settingsForm()
+ * @see \Drupal\d8plugin_field\FormatterInterface::settingsForm()
  */
 class ViewModeFieldDisplayFormContext extends ViewModeFieldDisplay implements ViewModeFieldDisplayFormContextInterface {
 

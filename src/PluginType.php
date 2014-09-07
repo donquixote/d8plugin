@@ -42,7 +42,7 @@ class PluginType {
       $this->pluginDefinitionClass = $definitionClass;
     }
     else {
-      $this->pluginDefinitionClass = PluginDefinition::getDefinitionClass();
+      $this->pluginDefinitionClass = PluginDefinition::getCalledClass();
     }
   }
 

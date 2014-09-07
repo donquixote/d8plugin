@@ -4,7 +4,10 @@
 namespace Drupal\d8plugin\PluginDefinition;
 
 
+use Drupal\d8plugin\Utility\GetCalledClassTrait;
+
 class PluginDefinition implements PluginDefinitionInterface {
+  use GetCalledClassTrait;
 
   /**
    * @var string
@@ -63,10 +66,4 @@ class PluginDefinition implements PluginDefinitionInterface {
     // Do nothing by default.
   }
 
-  /**
-   * @return string
-   */
-  static function getDefinitionClass() {
-    return \get_called_class();
-  }
 }

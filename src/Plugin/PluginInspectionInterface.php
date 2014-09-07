@@ -3,6 +3,8 @@
 
 namespace Drupal\d8plugin\Plugin;
 
+use Drupal\d8plugin\Utility\GetCalledClassInterface;
+
 /**
  * Plugin interface for providing some metadata inspection.
  *
@@ -11,7 +13,7 @@ namespace Drupal\d8plugin\Plugin;
  *
  * @ingroup plugin_api
  */
-interface PluginInspectionInterface {
+interface PluginInspectionInterface extends GetCalledClassInterface {
 
   /**
    * Returns the plugin_id of the plugin instance.

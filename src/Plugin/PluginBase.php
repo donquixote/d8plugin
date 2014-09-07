@@ -2,7 +2,10 @@
 
 namespace Drupal\d8plugin\Plugin;
 
-class PluginBase  implements PluginInspectionInterface, DerivativeInspectionInterface {
+use Drupal\d8plugin\Utility\GetCalledClassTrait;
+
+class PluginBase implements PluginInspectionInterface, DerivativeInspectionInterface {
+  use GetCalledClassTrait;
 
   /**
    * A string which is used to separate base plugin IDs from the derivative ID.

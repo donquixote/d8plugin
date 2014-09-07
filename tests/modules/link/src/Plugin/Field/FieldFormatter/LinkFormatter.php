@@ -11,8 +11,8 @@ use Drupal\d8plugin_field\ItemList\FieldItemListInterface;
  * Plugin implementation of the 'link' formatter.
  *
  * @FieldFormatter(
- *   id = "pluginapi_link",
- *   label = @Translation("Link (pluginapi)"),
+ *   id = "d8plugin_link",
+ *   label = @Translation("Link (d8plugin)"),
  *   field_types = {
  *     "link_field"
  *   }
