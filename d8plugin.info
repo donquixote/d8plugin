@@ -1,0 +1,6 @@
+name = Plugin API
+description = A novel plugin API for Drupal 7, in the spirit of the Drupal 8 plugin system.
+core = 7.x
+
+dependencies[] = composer_manager
+dependencies[] = xautoload (>=5.x)

@@ -1,0 +1,25 @@
+<?php
+
+use Drupal\d8plugin\DIC\ServiceContainer;
+
+function d8plugin_module_implements_alter() {
+}
+
+/**
+ * Implements hook_d8plugin()
+ *
+ * @param $info
+ */
+function d8plugin_d8plugin($info) {
+  # $info->defaultPluginDirectory();
+}
+
+/**
+ * @return Drupal\d8plugin\DIC\ServiceContainer
+ */
+function d8plugin() {
+  static $services;
+  return isset($services)
+    ? $services
+    : $services = new ServiceContainer();
+}

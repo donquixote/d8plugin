@@ -1,0 +1,3 @@
+name = D8 Plugin API Test Link
+description = Test module for D8 Plugin API with example formatters for link field.
+core = 7.x

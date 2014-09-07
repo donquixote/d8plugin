@@ -1,0 +1,5 @@
+name = Field plugins (D8 Plugin API)
+description = Defines the FieldFormatter plugin type.
+core = 7.x
+
+dependencies[] = d8plugin

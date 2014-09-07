@@ -1,0 +1,159 @@
+<?php
+use Drupal\d8plugin_field\DIC\FieldServiceContainer;
+use Drupal\d8plugin_field\FieldInfo\EntityTypeField;
+use Drupal\d8plugin_field\FieldInfo\FieldDisplay;
+use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplay;
+use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayFormContext;
+use Drupal\d8plugin_field\ItemList\AlterableFieldItemList;
+use Drupal\d8plugin_field\ItemList\FieldItemList;
+
+/**
+ * Implements hook_field_formatter_info()
+ *
+ * @return array
+ *   Array with field formatter information.
+ */
+function d8plugin_field_field_formatter_info() {
+  $definitions = d8plugin_field()->formatterPluginManager->getDefinitions();
+  $info = array();
+  foreach ($definitions as $id => $definition) {
+    $info[$id] = $definition->getArgs();
+  }
+  return $info;
+}
+
+/**
+ * Implements hook_field_formatter_settings_form()
+ *
+ * @param $field
+ * @param $instance
+ * @param $view_mode
+ * @param $form
+ * @param $form_state
+ *
+ * @return array
+ *   A form array.
+ */
+function d8plugin_field_field_formatter_settings_form($field, $instance, $view_mode, $form, &$form_state) {
+
+  $display = $instance['display'][$view_mode];
+
+  $plugin = d8plugin_field()->formatterPluginManager->getInstance(
+    $display['type'],
+    $display['settings']);
+
+  $context = new ViewModeFieldDisplayFormContext(
+    $instance['entity_type'],
+    $field,
+    $instance,
+    $view_mode,
+    $form,
+    $form_state);
+
+  return $plugin->settingsForm($context);
+}
+
+/**
+ * Implements hook_field_formatter_settings_summary()
+ *
+ * @param array $field
+ * @param array $instance
+ * @param string $view_mode
+ *
+ * @return string
+ */
+function d8plugin_field_field_formatter_settings_summary($field, $instance, $view_mode) {
+
+  $display = $instance['display'][$view_mode];
+
+  $plugin = d8plugin_field()->formatterPluginManager->getInstance(
+    $display['type'],
+    $display['settings']);
+
+  $context = new ViewModeFieldDisplay(
+    $instance['entity_type'],
+    $field,
+    $instance,
+    $view_mode);
+
+  return $plugin->settingsSummary($context);
+}
+
+/**
+ * Implements hook_field_formatter_prepare_view()
+ *
+ * @param string $entity_type
+ * @param object[] $entities
+ * @param array $field
+ * @param array[] $instances
+ * @param string $langcode
+ * @param array[][] $items
+ * @param array[] $displays
+ */
+function d8plugin_field_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
+
+  /** @var AlterableFieldItemList[][] $itemListsGrouped */
+  $itemListsGrouped = array();
+  $distinctDisplays = array();
+  foreach ($displays as $entityId => $display) {
+    $md5 = md5(serialize($display));
+    $distinctDisplays[$md5] = $display;
+    $itemListsGrouped[$md5][$entityId] = new AlterableFieldItemList(
+      $entity_type,
+      $entities[$entityId],
+      $field,
+      $instances[$entityId],
+      $langcode,
+      $items[$entityId]
+    );
+  }
+
+  $entity_type_field = new EntityTypeField($entity_type, $field);
+
+  foreach ($distinctDisplays as $md5 => $display) {
+    $itemLists = $itemListsGrouped[$md5];
+    $formatterPlugin = d8plugin_field()->formatterPluginManager->getInstance(
+      $display['type'],
+      $display['settings']);
+
+    if (!isset($formatterPlugin)) {
+      continue;
+    }
+    $formatterPlugin->prepareView($itemLists, $entity_type_field);
+  }
+}
+
+/**
+ * Implements hook_field_formatter_view()
+ *
+ * @param string $entity_type
+ * @param object $entity
+ * @param array $field
+ * @param array $instance
+ * @param string $langcode
+ * @param array[] $items
+ * @param array $display
+ *
+ * @return array
+ *   A Drupal render array.
+ */
+function d8plugin_field_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
+
+  $plugin = d8plugin_field()->formatterPluginManager->getInstance(
+    $display['type'],
+    $display['settings']);
+
+  $context = new FieldDisplay($entity_type, $field, $instance, $display);
+
+  return $plugin->view(new FieldItemList($entity, $context, $langcode, $items));
+}
+
+/**
+ * @return FieldServiceContainer
+ */
+function d8plugin_field() {
+  static $services;
+  return isset($services)
+    ? $services
+    : $services = new FieldServiceContainer(d8plugin());
+}

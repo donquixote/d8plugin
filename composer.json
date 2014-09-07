@@ -1,0 +1,7 @@
+{
+  "name": "Drupal 7 Plugin API",
+  "require": {
+    "vektah/parser-combinator": "~0.2",
+    "doctrine/common": "~2.4"
+  }
+}
