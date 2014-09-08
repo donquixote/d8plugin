@@ -5,6 +5,7 @@ namespace Drupal\d8plugin_field\ItemList;
 
 
 use Drupal\d8plugin_field\FieldInfo\FieldDisplayInterface;
+use Traversable;
 
 class FieldItemList extends FieldItemListBase {
 
@@ -32,6 +33,15 @@ class FieldItemList extends FieldItemListBase {
    */
   public function getItems() {
     return $this->items;
+  }
+
+  /**
+   * Retrieves an external iterator
+   *
+   * @return \ArrayIterator
+   */
+  public function getIterator() {
+    return new \ArrayIterator($this->items);
   }
 
 }

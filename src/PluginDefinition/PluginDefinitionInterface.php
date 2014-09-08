@@ -23,4 +23,9 @@ interface PluginDefinitionInterface extends GetCalledClassInterface {
    */
   function getArgs();
 
+  /**
+   * @return bool
+   */
+  function isConfigurable();
+
 } 

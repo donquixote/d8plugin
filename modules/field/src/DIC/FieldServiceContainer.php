@@ -5,10 +5,12 @@ namespace Drupal\d8plugin_field\DIC;
 
 use Drupal\d8plugin\DIC\ServiceContainer;
 use Drupal\d8plugin\DIC\ServiceContainerBase;
-use Drupal\d8plugin_field\FormatterPluginManager;
+use Drupal\d8plugin_field\Formatter\FormatterPluginManager;
+use Drupal\d8plugin_field\PrepareViewHandler;
 
 /**
- * @property FormatterPluginManager $formatterPluginManager
+ * @property \Drupal\d8plugin_field\Formatter\FormatterPluginManager $formatterPluginManager
+ * @property PrepareViewHandler $prepareViewHandler
  */
 class FieldServiceContainer extends ServiceContainerBase {
 
@@ -17,6 +19,9 @@ class FieldServiceContainer extends ServiceContainerBase {
    */
   private $parentServices;
 
+  /**
+   * @param ServiceContainer $parentServices
+   */
   function __construct(ServiceContainer $parentServices) {
     $this->parentServices = $parentServices;
   }
@@ -27,6 +32,10 @@ class FieldServiceContainer extends ServiceContainerBase {
   protected function get_formatterPluginManager() {
     return new FormatterPluginManager(
       $this->parentServices->pluginInfoRegistry);
+  }
+
+  protected function get_prepareViewHandler() {
+    return new PrepareViewHandler($this->formatterPluginManager);
   }
 
 }

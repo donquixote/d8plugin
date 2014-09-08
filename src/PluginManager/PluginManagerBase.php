@@ -6,6 +6,7 @@ namespace Drupal\d8plugin\PluginManager;
 use Drupal\d8plugin\Discovery\PluginInfoRegistry;
 use Drupal\d8plugin\Plugin\ConfigurablePluginInterface;
 use Drupal\d8plugin\Plugin\PluginInterface;
+use Drupal\d8plugin\PluginDefinition\PluginDefinitionInterface;
 use Drupal\d8plugin\PluginType;
 
 abstract class PluginManagerBase implements PluginManagerInterface {
@@ -48,9 +49,9 @@ abstract class PluginManagerBase implements PluginManagerInterface {
   }
 
   /**
-   * @param $plugin_id
+   * @param string $plugin_id
    *
-   * @return \Drupal\d8plugin\PluginDefinition\PluginDefinitionInterface|null
+   * @return PluginDefinitionInterface|null
    */
   function getDefinition($plugin_id) {
     $definitions = $this->getDefinitions();
@@ -60,7 +61,7 @@ abstract class PluginManagerBase implements PluginManagerInterface {
   }
 
   /**
-   * @return \Drupal\d8plugin\PluginDefinition\PluginDefinitionInterface[]
+   * @return PluginDefinitionInterface[]
    */
   function getDefinitions() {
     $pluginType = $this->getPluginType();

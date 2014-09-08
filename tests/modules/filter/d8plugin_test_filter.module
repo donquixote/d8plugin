@@ -3,6 +3,6 @@
 /**
  * Implements hook_d8plugin()
  */
-function d8plugin_test_link_d8plugin() {
+function d8plugin_test_filter_d8plugin() {
 
 }

@@ -2,20 +2,34 @@
 
 use Drupal\d8plugin\DIC\ServiceContainer;
 
-function d8plugin_module_implements_alter() {
-}
-
 /**
- * Implements hook_d8plugin()
+ * Implements @see hook_module_implements_alter()
  *
- * @param $info
+ * Cleans up false positives from the module_implements() cache.
+ *
+ * @param array $implementations
+ * @param string $hook
  */
-function d8plugin_d8plugin($info) {
-  # $info->defaultPluginDirectory();
+function d8plugin_module_implements_alter(array &$implementations, $hook) {
+  if (isset($implementations['d8plugin'])) {
+    switch ($hook) {
+
+      case 'module_implements_alter':
+        // This may stay.
+        // (although it usually does not trigger this hook anyway)
+        return;
+
+      default:
+        // This is a false positive and needs to go.
+        unset($implementations['d8plugin']);
+    }
+  }
 }
 
 /**
- * @return Drupal\d8plugin\DIC\ServiceContainer
+ * Gets the d8plugin service container, lazy-instantiated.
+ *
+ * @return ServiceContainer
  */
 function d8plugin() {
   static $services;

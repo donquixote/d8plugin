@@ -56,4 +56,13 @@ class AlterableFieldItemList extends FieldItemListBase implements AlterableField
     unset($this->items[$delta]);
   }
 
+  /**
+   * Retrieves an external iterator
+   *
+   * @return \ArrayIterator
+   */
+  public function getIterator() {
+    return new \ArrayIterator($this->items);
+  }
+
 }

@@ -1,0 +1,77 @@
+<?php
+use Drupal\d8plugin_filter\DIC\FilterServiceContainer;
+use Drupal\d8plugin_filter\FilterPlugin\ConfigurableFilterInterface;
+use Drupal\d8plugin_filter\FilterPlugin\FilterPrepareInterface;
+
+/**
+ * @return FilterServiceContainer
+ */
+function d8plugin_filter() {
+  static $services;
+  return isset($services)
+    ? $services
+    : $services = new FilterServiceContainer(d8plugin());
+}
+
+/**
+ * Implements hook_filter_info()
+ *
+ * @return array
+ */
+function d8plugin_filter_filter_info() {
+  $manager = d8plugin_filter()->filterPluginManager;
+  $definitions = $manager->getDefinitions();
+  $info = [];
+  foreach ($definitions as $pluginId => $definition) {
+    $pluginInfo
+      = [
+        'process callback' => '_d8plugin_filter_process',
+        'tips callback' => '_d8plugin_filter_tips',
+      ]
+      + $definition->getArgs()
+      + [
+        'title' => $definition->getLabel(),
+      ]
+    ;
+    $plugin = $manager->getInstance($pluginId);
+    if ($plugin instanceof ConfigurableFilterInterface) {
+      $info['default settings'] = $plugin->defaultConfiguration();
+      $info['settings callback'] = '_d8plugin_filter_settings';
+    }
+    if ($plugin instanceof FilterPrepareInterface) {
+      $info['prepare callback'] = '_d8plugin_filter_prepare';
+    }
+    $info[$pluginId] = $pluginInfo;
+  }
+  return $info;
+}
+
+function _d8plugin_filter_settings($form, &$form_state, $filter, $format, $defaults, $filters) {
+  $plugin = d8plugin_filter()->filterPluginManager->getInstance($filter->name, $filter->settings);
+  if ($plugin instanceof ConfigurableFilterInterface) {
+    return $plugin->settingsForm($form, $form_state);
+  }
+  else {
+    return array();
+  }
+}
+
+function _d8plugin_filter_prepare($text, $filter, $format, $langcode, $cache, $cache_id) {
+  $plugin = d8plugin_filter()->filterPluginManager->getInstance($filter->name, $filter->settings);
+  if ($plugin instanceof FilterPrepareInterface) {
+    return $plugin->prepare($text, $langcode);
+  }
+  else {
+    return $text;
+  }
+}
+
+function _d8plugin_filter_process($text, $filter, $format, $langcode, $cache, $cache_id) {
+  $plugin = d8plugin_filter()->filterPluginManager->getInstance($filter->name, $filter->settings);
+  return $plugin->process($text, $langcode);
+}
+
+function _d8plugin_filter_tips($filter, $format, $long) {
+  $plugin = d8plugin_filter()->filterPluginManager->getInstance($filter->name, $filter->settings);
+  return $plugin->tips($long);
+}

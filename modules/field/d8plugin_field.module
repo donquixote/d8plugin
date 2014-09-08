@@ -1,23 +1,36 @@
 <?php
+use Drupal\d8plugin\Plugin\ConfigurablePluginInterface;
 use Drupal\d8plugin_field\DIC\FieldServiceContainer;
 use Drupal\d8plugin_field\FieldInfo\EntityTypeField;
 use Drupal\d8plugin_field\FieldInfo\FieldDisplay;
 use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplay;
 use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayFormContext;
+use Drupal\d8plugin_field\Formatter\ConfigurableFormatterInterface;
 use Drupal\d8plugin_field\ItemList\AlterableFieldItemList;
 use Drupal\d8plugin_field\ItemList\FieldItemList;
+use Drupal\d8plugin_field\Formatter\FormatterPrepareViewInterface;
 
 /**
  * Implements hook_field_formatter_info()
  *
  * @return array
  *   Array with field formatter information.
+ *
+ * @see link_field_formatter_info()
  */
 function d8plugin_field_field_formatter_info() {
-  $definitions = d8plugin_field()->formatterPluginManager->getDefinitions();
+  $manager = d8plugin_field()->formatterPluginManager;
+  $definitions = $manager->getDefinitions();
   $info = array();
-  foreach ($definitions as $id => $definition) {
-    $info[$id] = $definition->getArgs();
+  foreach ($definitions as $pluginId => $definition) {
+    $pluginInfo = $definition->getInfo();
+    // Unfortunately we need to instantiate a non-configured plugin instance to
+    // get the default values.
+    $plugin = $manager->getInstance($pluginId);
+    if ($plugin instanceof ConfigurablePluginInterface) {
+      $pluginInfo['settings'] = $plugin->defaultConfiguration();
+    }
+    $info[$pluginId] = $pluginInfo;
   }
   return $info;
 }
@@ -41,6 +54,10 @@ function d8plugin_field_field_formatter_settings_form($field, $instance, $view_m
   $plugin = d8plugin_field()->formatterPluginManager->getInstance(
     $display['type'],
     $display['settings']);
+
+  if (!$plugin instanceof ConfigurableFormatterInterface) {
+    return array();
+  }
 
   $context = new ViewModeFieldDisplayFormContext(
     $instance['entity_type'],
@@ -70,6 +87,10 @@ function d8plugin_field_field_formatter_settings_summary($field, $instance, $vie
     $display['type'],
     $display['settings']);
 
+  if (!$plugin instanceof ConfigurableFormatterInterface) {
+    return '';
+  }
+
   $context = new ViewModeFieldDisplay(
     $instance['entity_type'],
     $field,
@@ -91,36 +112,7 @@ function d8plugin_field_field_formatter_settings_summary($field, $instance, $vie
  * @param array[] $displays
  */
 function d8plugin_field_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
-
-  /** @var AlterableFieldItemList[][] $itemListsGrouped */
-  $itemListsGrouped = array();
-  $distinctDisplays = array();
-  foreach ($displays as $entityId => $display) {
-    $md5 = md5(serialize($display));
-    $distinctDisplays[$md5] = $display;
-    $itemListsGrouped[$md5][$entityId] = new AlterableFieldItemList(
-      $entity_type,
-      $entities[$entityId],
-      $field,
-      $instances[$entityId],
-      $langcode,
-      $items[$entityId]
-    );
-  }
-
-  $entity_type_field = new EntityTypeField($entity_type, $field);
-
-  foreach ($distinctDisplays as $md5 => $display) {
-    $itemLists = $itemListsGrouped[$md5];
-    $formatterPlugin = d8plugin_field()->formatterPluginManager->getInstance(
-      $display['type'],
-      $display['settings']);
-
-    if (!isset($formatterPlugin)) {
-      continue;
-    }
-    $formatterPlugin->prepareView($itemLists, $entity_type_field);
-  }
+  d8plugin_field()->prepareViewHandler->handlePrepareView($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
 }
 
 /**

@@ -5,6 +5,7 @@ namespace Drupal\d8plugin_field\ItemList;
 
 
 use Drupal\d8plugin_field\FieldInfo\FieldDisplayInterface;
+use Traversable;
 
 /**
  * Abstract base class for

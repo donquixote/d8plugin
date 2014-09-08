@@ -1,0 +1,7 @@
+name = D8 Plugin API Test Filter
+description = Test module for D8 Plugin API with example filters.
+core = 7.x
+
+dependencies[] = d8plugin
+dependencies[] = d8plugin_filter
+dependencies[] = filter

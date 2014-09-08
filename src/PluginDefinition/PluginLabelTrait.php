@@ -14,13 +14,6 @@ trait PluginLabelTrait {
   private $label;
 
   /**
-   * @param string $label
-   */
-  protected function __construct__($label) {
-    $this->label = $label;
-  }
-
-  /**
    * @param array $args
    */
   protected function initLabel(array $args) {

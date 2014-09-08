@@ -19,7 +19,7 @@ use Drupal\d8plugin_field\FieldInfo\FieldDisplayInterface;
  * When implementing this interface which extends Traversable, make sure to list
  * IteratorAggregate or Iterator before this interface in the implements clause.
  */
-interface FieldItemListInterface extends FieldDisplayInterface {
+interface FieldItemListInterface extends FieldDisplayInterface, \IteratorAggregate {
 
   /**
    * Gets the entity that field belongs to.

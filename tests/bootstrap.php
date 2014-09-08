@@ -9,8 +9,23 @@ call_user_func(
     }
     $loader->addPsr4('Drupal\d8plugin\\', $moduleDir . '/src');
     $loader->addPsr4('Drupal\Tests\d8plugin\\', $moduleDir . '/tests/src');
-    foreach (['field'] as $key) {
-      $loader->addPsr4("Drupal\\d8plugin_{$key}\\", $moduleDir . "/modules/$key/src");
+    foreach (
+      [
+        __DIR__ => 'Drupal\\d8plugin_test_',
+        $moduleDir => 'Drupal\\d8plugin_'
+      ]
+      as $basedir => $prefix
+    ) {
+      foreach (new \DirectoryIterator($basedir . '/modules') as $fileInfo) {
+        if ($fileInfo->isDot()) {
+          continue;
+        }
+        if ($fileInfo->isDir()) {
+          $key = $fileInfo->getFilename();
+          $loader->addPsr4($ns = $prefix . $key . '\\', $ph = $basedir . "/modules/$key/src");
+          print "\n($ns => $ph)\n";
+        }
+      }
     }
   }
 );

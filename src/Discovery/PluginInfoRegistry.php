@@ -35,7 +35,7 @@ class PluginInfoRegistry {
   /**
    * @param PluginType $pluginType
    *
-   * @return \Drupal\d8plugin\PluginDefinition\PluginDefinitionInterface[]
+   * @return PluginDefinitionInterface[]
    *   Format: $[$pluginName] = $pluginDefinition
    */
   function getPluginDefinitions($pluginType) {

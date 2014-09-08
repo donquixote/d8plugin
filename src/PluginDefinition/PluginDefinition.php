@@ -4,6 +4,7 @@
 namespace Drupal\d8plugin\PluginDefinition;
 
 
+use Drupal\d8plugin\Plugin\ConfigurablePluginInterface;
 use Drupal\d8plugin\Utility\GetCalledClassTrait;
 
 class PluginDefinition implements PluginDefinitionInterface {
@@ -66,4 +67,10 @@ class PluginDefinition implements PluginDefinitionInterface {
     // Do nothing by default.
   }
 
+  /**
+   * @return bool
+   */
+  function isConfigurable() {
+    return $this->class instanceof ConfigurablePluginInterface;
+  }
 }

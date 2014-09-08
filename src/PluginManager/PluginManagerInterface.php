@@ -5,6 +5,7 @@ namespace Drupal\d8plugin\PluginManager;
 
 
 use Drupal\d8plugin\Plugin\ConfigurablePluginInterface;
+use Drupal\d8plugin\PluginDefinition\PluginDefinitionInterface;
 
 interface PluginManagerInterface {
 
@@ -17,14 +18,14 @@ interface PluginManagerInterface {
   function getInstance($plugin_id, array $configuration = array());
 
   /**
-   * @param $plugin_id
+   * @param string $plugin_id
    *
-   * @return \Drupal\d8plugin\PluginDefinition\PluginDefinitionInterface|null
+   * @return PluginDefinitionInterface|null
    */
   function getDefinition($plugin_id);
 
   /**
-   * @return \Drupal\d8plugin\PluginDefinition\PluginDefinitionInterface[]
+   * @return PluginDefinitionInterface[]
    */
   function getDefinitions();
 

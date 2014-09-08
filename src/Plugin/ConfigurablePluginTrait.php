@@ -29,14 +29,4 @@ trait ConfigurablePluginTrait {
     $this->configuration = $configuration;
   }
 
-  /**
-   * Returns default configuration for this plugin.
-   *
-   * @return array
-   *   An associative array with the default configuration.
-   */
-  public function defaultConfiguration() {
-    return array();
-  }
-
 }

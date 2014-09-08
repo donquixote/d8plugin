@@ -8,9 +8,10 @@ use Drupal\d8plugin\Discovery\Argument\ArgumentsResolver;
 use Drupal\d8plugin\Discovery\FileDiscovery;
 use Drupal\d8plugin\ModuleInfoCollection;
 use Drupal\d8plugin_field\DIC\FieldServiceContainer;
-use Drupal\d8plugin_field\FormatterPluginManager;
+use Drupal\d8plugin_field\Formatter\FormatterPluginManager;
 use Drupal\d8plugin\PluginDefinition\PluginDefinition;
 use Drupal\d8plugin\PluginType;
+use Drupal\d8plugin_field\PluginDefinition\FormatterDefinition;
 use Drupal\d8plugin_test_link\Plugin\Field\FieldFormatter\DomainLinkFormatter;
 use Drupal\d8plugin_test_link\Plugin\Field\FieldFormatter\LinkFormatter;
 use Drupal\Tests\d8plugin\Mock\MockTranslationResolver;
@@ -69,30 +70,41 @@ EOT;
   }
 
   function testPluginDiscovery() {
-    $pluginType = new PluginType('Field\\FieldFormatter', 'FieldFormatter');
+
+    $pluginType = new PluginType(
+      'Field\\FieldFormatter',
+      'FieldFormatter',
+      FormatterDefinition::getCalledClass()
+    );
+
     $discovery = $this->getServiceContainer()->pluginDiscoveryFactory->getPluginDiscovery($pluginType);
     $discovery->discoverModulePlugins('d8plugin_test_link', dirname(__DIR__) . '/modules/link');
+
     $this->assertEquals(
       $this->getExpectedDefinitions(),
-      $discovery->getCollectedInfo());
+      $discovery->getCollectedInfo()
+    );
   }
 
   function testPluginManagerDefinitions() {
     $this->assertEquals(
       $this->getExpectedDefinitions(),
-      $this->getFormatterManager()->getDefinitions());
+      $this->getFormatterManager()->getDefinitions()
+    );
   }
 
   function testPluginManagerInstance() {
     $this->assertEquals(
       new LinkFormatter(
         'd8plugin_link',
-        $this->getExpectedDefinitions()['d8plugin_link']),
-      $this->getFormatterManager()->getInstance('d8plugin_link'));
+        $this->getExpectedDefinitions()['d8plugin_link']
+      ),
+      $this->getFormatterManager()->getInstance('d8plugin_link')
+    );
   }
 
   /**
-   * @return FormatterPluginManager
+   * @return \Drupal\d8plugin_field\Formatter\FormatterPluginManager
    */
   private function getFormatterManager() {
     $services = $this->getServiceContainer();
@@ -105,7 +117,7 @@ EOT;
    */
   private function getExpectedDefinitions() {
     return [
-      'd8plugin_link' => new PluginDefinition(
+      'd8plugin_link' => new FormatterDefinition(
         'd8plugin_link',
         LinkFormatter::getCalledClass(),
         [
@@ -114,7 +126,7 @@ EOT;
           'field_types' => ['link_field'],
         ]
       ),
-      'd8plugin_link_domain' => new PluginDefinition(
+      'd8plugin_link_domain' => new FormatterDefinition(
         'd8plugin_link_domain',
         DomainLinkFormatter::getCalledClass(),
         [

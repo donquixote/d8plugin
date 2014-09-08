@@ -3,8 +3,10 @@
 
 namespace Drupal\d8plugin_test_link\Plugin\Field\FieldFormatter;
 
+use Drupal\d8plugin\Plugin\ConfigurablePluginTrait;
 use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayFormContextInterface;
 use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayInterface;
+use Drupal\d8plugin_field\Formatter\ConfigurableFormatterInterface;
 
 
 /**
@@ -18,7 +20,8 @@ use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayInterface;
  *   }
  * )
  */
-class DomainLinkFormatter extends LinkFormatter {
+class DomainLinkFormatter extends LinkFormatter implements ConfigurableFormatterInterface {
+  use ConfigurablePluginTrait;
 
   /**
    * {@inheritdoc}
@@ -46,4 +49,15 @@ class DomainLinkFormatter extends LinkFormatter {
     }
   }
 
-} 
+  /**
+   * Returns default configuration for this plugin.
+   *
+   * @return array
+   *   An associative array with the default configuration.
+   */
+  public function defaultConfiguration() {
+    return array(
+      'strip_www' => FALSE,
+    );
+  }
+}

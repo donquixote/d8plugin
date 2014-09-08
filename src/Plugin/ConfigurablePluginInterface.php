@@ -3,7 +3,14 @@
 
 namespace Drupal\d8plugin\Plugin;
 
-
+/**
+ * Interface for configurable plugins.
+ *
+ * This interface has no methods for settings form or settings summary, since
+ * these might need a signature unique to the plugin type.
+ *
+ * @see \Drupal\d8plugin_field\Formatter\ConfigurableFormatterInterface
+ */
 interface ConfigurablePluginInterface extends PluginInterface {
 
   /**
