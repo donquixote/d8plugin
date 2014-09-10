@@ -1,7 +1,10 @@
 <?php
 
 
-namespace Drupal\d8plugin_field\FieldInfo;
+namespace Drupal\d8plugin_field\Formatter\Context;
+
+use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplay;
+use Drupal\d8plugin_field\Formatter\Context\ViewModeFieldDisplayFormContextInterface;
 
 /**
  * Argument wrapper for

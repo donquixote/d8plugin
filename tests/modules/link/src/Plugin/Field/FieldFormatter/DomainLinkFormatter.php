@@ -4,7 +4,7 @@
 namespace Drupal\d8plugin_test_link\Plugin\Field\FieldFormatter;
 
 use Drupal\d8plugin\Plugin\ConfigurablePluginTrait;
-use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayFormContextInterface;
+use Drupal\d8plugin_field\Formatter\Context\ViewModeFieldDisplayFormContextInterface;
 use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayInterface;
 use Drupal\d8plugin_field\Formatter\ConfigurableFormatterInterface;
 

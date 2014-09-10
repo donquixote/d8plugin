@@ -1,7 +1,9 @@
 <?php
 
 
-namespace Drupal\d8plugin_field\FieldInfo;
+namespace Drupal\d8plugin_field\Formatter\Context;
+
+use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayInterface;
 
 /**
  * Wraps the arguments for @see hook_field_formatter_settings_form()

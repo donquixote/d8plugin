@@ -5,7 +5,7 @@ namespace Drupal\d8plugin_field\Formatter;
 
 
 use Drupal\d8plugin\Plugin\ConfigurablePluginInterface;
-use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayFormContextInterface;
+use Drupal\d8plugin_field\Formatter\Context\ViewModeFieldDisplayFormContextInterface;
 use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayInterface;
 
 interface ConfigurableFormatterInterface extends FormatterInterface, ConfigurablePluginInterface {

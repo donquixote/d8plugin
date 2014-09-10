@@ -4,7 +4,7 @@ use Drupal\d8plugin_field\DIC\FieldServiceContainer;
 use Drupal\d8plugin_field\FieldInfo\EntityTypeField;
 use Drupal\d8plugin_field\FieldInfo\FieldDisplay;
 use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplay;
-use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayFormContext;
+use Drupal\d8plugin_field\Formatter\Context\ViewModeFieldDisplayFormContext;
 use Drupal\d8plugin_field\Formatter\ConfigurableFormatterInterface;
 use Drupal\d8plugin_field\ItemList\AlterableFieldItemList;
 use Drupal\d8plugin_field\ItemList\FieldItemList;
