@@ -29,7 +29,7 @@ abstract class PluginManagerBase implements PluginManagerInterface {
    *
    * @return PluginInterface|null
    */
-  function getInstance($plugin_id, array $configuration = NULL) {
+  function createInstance($plugin_id, array $configuration = NULL) {
     $definition = $this->getDefinition($plugin_id);
     if (!isset($definition)) {
       return NULL;

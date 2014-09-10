@@ -26,7 +26,7 @@ function d8plugin_field_field_formatter_info() {
     $pluginInfo = $definition->getInfo();
     // Unfortunately we need to instantiate a non-configured plugin instance to
     // get the default values.
-    $plugin = $manager->getInstance($pluginId);
+    $plugin = $manager->createInstance($pluginId);
     if ($plugin instanceof ConfigurablePluginInterface) {
       $pluginInfo['settings'] = $plugin->defaultConfiguration();
     }
@@ -51,7 +51,7 @@ function d8plugin_field_field_formatter_settings_form($field, $instance, $view_m
 
   $display = $instance['display'][$view_mode];
 
-  $plugin = d8plugin_field()->formatterPluginManager->getInstance(
+  $plugin = d8plugin_field()->formatterPluginManager->createInstance(
     $display['type'],
     $display['settings']);
 
@@ -83,7 +83,7 @@ function d8plugin_field_field_formatter_settings_summary($field, $instance, $vie
 
   $display = $instance['display'][$view_mode];
 
-  $plugin = d8plugin_field()->formatterPluginManager->getInstance(
+  $plugin = d8plugin_field()->formatterPluginManager->createInstance(
     $display['type'],
     $display['settings']);
 
@@ -131,7 +131,7 @@ function d8plugin_field_field_formatter_prepare_view($entity_type, $entities, $f
  */
 function d8plugin_field_field_formatter_view($entity_type, $entity, $field, $instance, $langcode, $items, $display) {
 
-  $plugin = d8plugin_field()->formatterPluginManager->getInstance(
+  $plugin = d8plugin_field()->formatterPluginManager->createInstance(
     $display['type'],
     $display['settings']);
 

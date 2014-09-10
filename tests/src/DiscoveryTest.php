@@ -99,7 +99,7 @@ EOT;
         'd8plugin_link',
         $this->getExpectedDefinitions()['d8plugin_link']
       ),
-      $this->getFormatterManager()->getInstance('d8plugin_link')
+      $this->getFormatterManager()->createInstance('d8plugin_link')
     );
   }
 

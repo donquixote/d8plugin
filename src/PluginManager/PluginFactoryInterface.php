@@ -15,6 +15,6 @@ interface PluginFactoryInterface {
    *
    * @return ConfigurablePluginInterface|null
    */
-  function getInstance($plugin_id, array $configuration = array());
+  function createInstance($plugin_id, array $configuration = array());
 
 } 

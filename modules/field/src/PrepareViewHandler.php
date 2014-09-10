@@ -52,7 +52,7 @@ class PrepareViewHandler {
     }
     $entityTypeField = new EntityTypeField($entity_type, $field);
     foreach ($filteredIds as $pluginId => $entityIds) {
-      $plugin = $this->manager->getInstance($pluginId);
+      $plugin = $this->manager->createInstance($pluginId);
       if (!$plugin instanceof FormatterPrepareViewInterface) {
         continue;
       }

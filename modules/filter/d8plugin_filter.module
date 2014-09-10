@@ -33,7 +33,7 @@ function d8plugin_filter_filter_info() {
         'title' => $definition->getLabel(),
       ]
     ;
-    $plugin = $manager->getInstance($pluginId);
+    $plugin = $manager->createInstance($pluginId);
     if ($plugin instanceof ConfigurableFilterInterface) {
       $info['default settings'] = $plugin->defaultConfiguration();
       $info['settings callback'] = '_d8plugin_filter_settings';
@@ -47,7 +47,7 @@ function d8plugin_filter_filter_info() {
 }
 
 function _d8plugin_filter_settings($form, &$form_state, $filter, $format, $defaults, $filters) {
-  $plugin = d8plugin_filter()->filterPluginManager->getInstance($filter->name, $filter->settings);
+  $plugin = d8plugin_filter()->filterPluginManager->createInstance($filter->name, $filter->settings);
   if ($plugin instanceof ConfigurableFilterInterface) {
     return $plugin->settingsForm($form, $form_state);
   }
@@ -57,7 +57,7 @@ function _d8plugin_filter_settings($form, &$form_state, $filter, $format, $defau
 }
 
 function _d8plugin_filter_prepare($text, $filter, $format, $langcode, $cache, $cache_id) {
-  $plugin = d8plugin_filter()->filterPluginManager->getInstance($filter->name, $filter->settings);
+  $plugin = d8plugin_filter()->filterPluginManager->createInstance($filter->name, $filter->settings);
   if ($plugin instanceof FilterPrepareInterface) {
     return $plugin->prepare($text, $langcode);
   }
@@ -67,11 +67,11 @@ function _d8plugin_filter_prepare($text, $filter, $format, $langcode, $cache, $c
 }
 
 function _d8plugin_filter_process($text, $filter, $format, $langcode, $cache, $cache_id) {
-  $plugin = d8plugin_filter()->filterPluginManager->getInstance($filter->name, $filter->settings);
+  $plugin = d8plugin_filter()->filterPluginManager->createInstance($filter->name, $filter->settings);
   return $plugin->process($text, $langcode);
 }
 
 function _d8plugin_filter_tips($filter, $format, $long) {
-  $plugin = d8plugin_filter()->filterPluginManager->getInstance($filter->name, $filter->settings);
+  $plugin = d8plugin_filter()->filterPluginManager->createInstance($filter->name, $filter->settings);
   return $plugin->tips($long);
 }

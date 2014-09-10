@@ -15,8 +15,8 @@ class FormatterPluginManager extends PluginManagerBase {
    *
    * @return FormatterInterface|null
    */
-  function getInstance($plugin_id, array $configuration = NULL) {
-    $plugin = parent::getInstance($plugin_id, $configuration);
+  function createInstance($plugin_id, array $configuration = NULL) {
+    $plugin = parent::createInstance($plugin_id, $configuration);
     return $plugin instanceof FormatterInterface
       ? $plugin
       : NULL;
