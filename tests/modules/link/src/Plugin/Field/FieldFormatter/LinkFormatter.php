@@ -4,10 +4,9 @@
 namespace Drupal\d8plugin_test_link\Plugin\Field\FieldFormatter;
 
 
-use Drupal\d8plugin_field\FieldInfo\EntityTypeFieldInterface;
+use Drupal\d8plugin_field\Formatter\Context\FormatterPrepareViewContextInterface;
+use Drupal\d8plugin_field\Formatter\Context\FormatterViewContextInterface;
 use Drupal\d8plugin_field\Formatter\FormatterBase;
-use Drupal\d8plugin_field\ItemList\AlterableFieldItemListInterface;
-use Drupal\d8plugin_field\ItemList\FieldItemListInterface;
 use Drupal\d8plugin_field\Formatter\FormatterPrepareViewInterface;
 
 /**
@@ -38,24 +37,21 @@ class LinkFormatter extends FormatterBase implements FormatterPrepareViewInterfa
    * Changes or additions to field values are done by directly altering the
    * items.
    *
-   * @param AlterableFieldItemListInterface[] $itemLists
-   *   Alterable field items by entity.
-   *   Format: $[$entity_id] = $items
-   * @param EntityTypeFieldInterface $entity_type_field
-   *   Entity type and field definition.
-   *   This is the same across all entities and instances.
+   * @param array $items_grouped
+   * @param FormatterPrepareViewContextInterface $context
    *
    * @see hook_field_formatter_prepare_view()
    * @see PrepareViewHandler
    */
-  public function prepareView(array $itemLists, EntityTypeFieldInterface $entity_type_field) {
-    dpm($itemLists);
+  public function prepareView(array &$items_grouped, FormatterPrepareViewContextInterface $context) {
+    dpm($items_grouped);
   }
 
   /**
    * Builds a renderable array for a fully themed field.
    *
-   * @param FieldItemListInterface $itemList
+   * @param array $items
+   * @param FormatterViewContextInterface $context
    *   The field values to be rendered.
    *   Also provides the entity and the context.
    *
@@ -64,20 +60,23 @@ class LinkFormatter extends FormatterBase implements FormatterPrepareViewInterfa
    *
    * @see hook_field_formatter_view()
    */
-  public function view(FieldItemListInterface $itemList) {
+  public function view(array $items, FormatterViewContextInterface $context) {
     $themeHook = $this->getThemeHook();
     $elements = array();
-    foreach ($itemList as $delta => $item) {
+    foreach ($context as $delta => $item) {
       $elements[$delta] = array(
         '#theme' => $themeHook,
         '#element' => $item,
-        '#field' => $itemList->getFieldInstance(),
-        '#display' => $itemList->getDisplay(),
+        '#field' => $context->getFieldInstance(),
+        '#display' => $context->getDisplay(),
       );
     }
     return $elements;
   }
 
+  /**
+   * @return string
+   */
   protected function getThemeHook() {
     $pluginId = $this->getPluginId();
     if ('d8plugin_link' === $pluginId) {

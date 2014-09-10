@@ -10,7 +10,6 @@ use Drupal\d8plugin_field\PrepareViewHandler;
 
 /**
  * @property \Drupal\d8plugin_field\Formatter\FormatterPluginManager $formatterPluginManager
- * @property PrepareViewHandler $prepareViewHandler
  */
 class FieldServiceContainer extends ServiceContainerBase {
 
@@ -32,10 +31,6 @@ class FieldServiceContainer extends ServiceContainerBase {
   protected function get_formatterPluginManager() {
     return new FormatterPluginManager(
       $this->parentServices->pluginInfoRegistry);
-  }
-
-  protected function get_prepareViewHandler() {
-    return new PrepareViewHandler($this->formatterPluginManager);
   }
 
 }

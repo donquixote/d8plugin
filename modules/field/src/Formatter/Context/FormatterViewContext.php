@@ -1,18 +1,13 @@
 <?php
 
 
-namespace Drupal\d8plugin_field\ItemList;
+namespace Drupal\d8plugin_field\Formatter\Context;
 
 
 use Drupal\d8plugin_field\FieldInfo\FieldDisplayInterface;
 use Traversable;
 
-/**
- * Abstract base class for
- * @see FieldItemlist
- * @see AlterableFieldItemList
- */
-abstract class FieldItemListBase implements FieldItemListInterface {
+class FormatterViewContext implements FormatterViewContextInterface {
 
   /**
    * @var object

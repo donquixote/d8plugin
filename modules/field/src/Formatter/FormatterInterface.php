@@ -3,7 +3,7 @@
 namespace Drupal\d8plugin_field\Formatter;
 
 use Drupal\d8plugin\Plugin\PluginInterface;
-use Drupal\d8plugin_field\ItemList\FieldItemListInterface;
+use Drupal\d8plugin_field\Formatter\Context\FormatterViewContextInterface;
 
 /**
  * Interface definition for field formatter plugins.
@@ -15,7 +15,8 @@ interface FormatterInterface extends PluginInterface {
   /**
    * Builds a renderable array for a fully themed field.
    *
-   * @param FieldItemListInterface $itemList
+   * @param array[] $items
+   * @param FormatterViewContextInterface $context
    *   The field values to be rendered.
    *   Also provides the entity and the context.
    *
@@ -24,6 +25,6 @@ interface FormatterInterface extends PluginInterface {
    *
    * @see hook_field_formatter_view()
    */
-  public function view(FieldItemListInterface $itemList);
+  public function view(array $items, FormatterViewContextInterface $context);
 
 } 

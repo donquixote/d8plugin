@@ -3,9 +3,7 @@
 
 namespace Drupal\d8plugin_field\Formatter;
 
-
-use Drupal\d8plugin_field\FieldInfo\EntityTypeFieldInterface;
-use Drupal\d8plugin_field\ItemList\AlterableFieldItemListInterface;
+use Drupal\d8plugin_field\Formatter\Context\FormatterPrepareViewContextInterface;
 
 interface FormatterPrepareViewInterface extends FormatterInterface {
 
@@ -24,16 +22,12 @@ interface FormatterPrepareViewInterface extends FormatterInterface {
    * Changes or additions to field values are done by directly altering the
    * items.
    *
-   * @param AlterableFieldItemListInterface[] $entities_items
-   *   Alterable field items by entity.
-   *   Format: $[$entity_id] = $items
-   * @param EntityTypeFieldInterface $entity_type_field
-   *   Entity type and field definition.
-   *   This is the same across all entities and instances.
+   * @param array[][] $items_grouped
+   * @param FormatterPrepareViewContextInterface $context
    *
    * @see hook_field_formatter_prepare_view()
    * @see PrepareViewHandler
    */
-  public function prepareView(array $entities_items, EntityTypeFieldInterface $entity_type_field);
+  public function prepareView(array &$items_grouped, FormatterPrepareViewContextInterface $context);
 
 } 

@@ -6,6 +6,9 @@ namespace Drupal\d8plugin_field\Formatter\Context;
 use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplay;
 use Drupal\d8plugin_field\Formatter\Context\ViewModeFieldDisplayFormContextInterface;
 
+use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplay;
+use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplayFormContextInterface;
+
 /**
  * Argument wrapper for
  * @see \Drupal\d8plugin_field\FormatterInterface::settingsForm()

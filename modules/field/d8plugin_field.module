@@ -6,8 +6,9 @@ use Drupal\d8plugin_field\FieldInfo\FieldDisplay;
 use Drupal\d8plugin_field\FieldInfo\ViewModeFieldDisplay;
 use Drupal\d8plugin_field\Formatter\Context\ViewModeFieldDisplayFormContext;
 use Drupal\d8plugin_field\Formatter\ConfigurableFormatterInterface;
-use Drupal\d8plugin_field\ItemList\AlterableFieldItemList;
-use Drupal\d8plugin_field\ItemList\FieldItemList;
+use Drupal\d8plugin_field\Formatter\Context\AlterableFieldItemList;
+use Drupal\d8plugin_field\Formatter\Context\FormatterPrepareViewContext;
+use Drupal\d8plugin_field\Formatter\Context\FormatterViewContext;
 use Drupal\d8plugin_field\Formatter\FormatterPrepareViewInterface;
 
 /**
@@ -108,11 +109,38 @@ function d8plugin_field_field_formatter_settings_summary($field, $instance, $vie
  * @param array $field
  * @param array[] $instances
  * @param string $langcode
- * @param array[][] $items
+ * @param array[][] $items_grouped
  * @param array[] $displays
  */
-function d8plugin_field_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items, $displays) {
-  d8plugin_field()->prepareViewHandler->handlePrepareView($entity_type, $entities, $field, $instances, $langcode, $items, $displays);
+function d8plugin_field_field_formatter_prepare_view($entity_type, $entities, $field, $instances, $langcode, &$items_grouped, $displays) {
+
+  /** @var int[][] $pluginIds */
+  $pluginIds = [];
+  foreach ($displays as $entityId => $display) {
+    $pluginIds[$display['type']][] = $entityId;
+  }
+
+  /** @var FormatterPrepareViewInterface[] $formatters */
+  $formatters = array();
+  foreach ($pluginIds as $pluginId => $entityIds) {
+    $formatter = d8plugin_field()->formatterPluginManager->createInstance($pluginId);
+    if ($formatter instanceof FormatterPrepareViewInterface) {
+      $formatters[$pluginId] = $formatter;
+    }
+  }
+  if (empty($formatters)) {
+    return;
+  }
+
+  $context = new FormatterPrepareViewContext($entity_type, $entities, $field, $instances, $langcode, $displays);
+
+  foreach ($formatters as $pluginId => $formatter) {
+    $itemsByEntityId = array();
+    foreach ($pluginIds[$pluginId] as $entityId) {
+      $itemsByEntityId[$entityId] =& $items_grouped[$entityId];
+    }
+    $formatter->prepareView($itemsByEntityId, $context);
+  }
 }
 
 /**
@@ -137,7 +165,7 @@ function d8plugin_field_field_formatter_view($entity_type, $entity, $field, $ins
 
   $context = new FieldDisplay($entity_type, $field, $instance, $display);
 
-  return $plugin->view(new FieldItemList($entity, $context, $langcode, $items));
+  return $plugin->view($items, new FormatterViewContext($entity, $context, $langcode, $items));
 }
 
 /**
