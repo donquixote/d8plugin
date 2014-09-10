@@ -3,7 +3,6 @@
 
 namespace Drupal\d8plugin\PluginManager;
 
-use Drupal\d8plugin\Plugin\ConfigurablePluginInterface;
 
 interface PluginFactoryInterface {
 
@@ -13,7 +12,7 @@ interface PluginFactoryInterface {
    * @param string $plugin_id
    * @param array $configuration
    *
-   * @return ConfigurablePluginInterface|null
+   * @return \Drupal\d8plugin\Plugin\PluginInterface|null
    */
   function createInstance($plugin_id, array $configuration = array());
 
